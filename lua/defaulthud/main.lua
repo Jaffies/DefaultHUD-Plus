@@ -106,12 +106,16 @@ hook.Add("HUDShouldDraw", "DefaultHUD", function(hud, bool)
 	if hud == "CHudWeaponSelection" or hud == "CHudHealth" or hud == "CHudBattery" or hud == "CHudAmmo" or  hud == "CHudSuitPower" or hud == "CHudSecondaryAmmo" then return false end
 end)
 hook.Add("DFHUDPaint", "DefaultHUDPaint", function(bool)
+	local ScrH = ScrH
+	local ScrW = ScrW -- Setting it to be a local var, so we'll won't change global one
 	if !GetConVar("dfhud_enable"):GetBool() then return end
 	if bool then
 		local vel1 =math.AngleDifference(DefaultHUD.Angles[1], LocalPlayer():EyeAngles()[1])
 		local vel2 = math.AngleDifference(DefaultHUD.Angles[2], LocalPlayer():EyeAngles()[2])
 		cam.Start3D(Vector(0,0,0), Angle(0,0,0), 106, 0, 0, ScrW(), ScrH(), 4, 512)
 			cam.Start3D2D(Vector(14,18+vel2/16,9.5+vel1/16), Angle(0, 278, 90), 0.026)
+		ScrW = function() return 1366 end
+		ScrH = function() return 768 end -- For 3D mode fix
 	end
 	local boxcolor = Color(GetConVar("dfhud_box_color_r"):GetInt(), GetConVar("dfhud_box_color_g"):GetInt(), GetConVar("dfhud_box_color_b"):GetInt(), GetConVar("dfhud_box_color_a"):GetInt())
 	if hook.Run("HUDShouldDraw", "CHudHealth", true) and LocalPlayer():Alive() then

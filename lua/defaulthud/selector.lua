@@ -23,6 +23,8 @@ local dfweapons = {
 }
 hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) or !GetConVar("dfhud_enable"):GetBool() then return end
+	local ScrH = ScrH
+	local ScrW = ScrW -- Setting it to be a local var, so we'll won't change global one
 	if DefaultHUD.Time < SysTime() then
 		DefaultHUD.bindslot = "0"
 		DefaultHUD.Alpha = math.max(DefaultHUD.Alpha-32, 0)
@@ -39,6 +41,8 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 	local x = 435 / 1366 * ScrW()
 	local y = 25 / 768 * ScrH()
 	if bool then
+		ScrW = function() return 1366 end
+		ScrH = function() return 768 end -- For 3D mode fix
 		local vel1 =math.AngleDifference(DefaultHUD.Angles2[1], LocalPlayer():EyeAngles()[1])
 		local vel2 = math.AngleDifference(DefaultHUD.Angles2[2], LocalPlayer():EyeAngles()[2])
 		cam.Start3D(Vector(0,0,0), Angle(0,0,0), 106, 0, 0, ScrW(), ScrH(), 4, 512)
