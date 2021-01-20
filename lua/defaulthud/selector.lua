@@ -25,6 +25,7 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) or !GetConVar("dfhud_enable"):GetBool() then return end
 	local ScrH = ScrH
 	local ScrW = ScrW -- Setting it to be a local var, so we'll won't change global one
+	surface.DisableClipping(true)
 	if DefaultHUD.Time < SysTime() then
 		DefaultHUD.bindslot = "0"
 		DefaultHUD.Alpha = math.max(DefaultHUD.Alpha-32, 0)
@@ -93,6 +94,7 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 		cam.End3D2D()
 		cam.End3D()
 	end
+	surface.DisableClipping(false)
 end)
 hook.Add("CreateMove", "DefaultHUDMove", function(cmd)
 	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) and (!IsValid(LocalPlayer():GetActiveWeapon()) or !GetConVar("dfhud_enable"):GetBool() or !LocalPlayer():GetActiveWeapon():GetClass() != "weapon_camera") then return end

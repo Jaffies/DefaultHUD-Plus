@@ -108,12 +108,13 @@ end)
 hook.Add("DFHUDPaint", "DefaultHUDPaint", function(bool)
 	local ScrH = ScrH
 	local ScrW = ScrW -- Setting it to be a local var, so we'll won't change global one
+	surface.DisableClipping(true)
 	if !GetConVar("dfhud_enable"):GetBool() then return end
 	if bool then
 		local vel1 =math.AngleDifference(DefaultHUD.Angles[1], LocalPlayer():EyeAngles()[1])
 		local vel2 = math.AngleDifference(DefaultHUD.Angles[2], LocalPlayer():EyeAngles()[2])
 		cam.Start3D(Vector(0,0,0), Angle(0,0,0), 106, 0, 0, ScrW(), ScrH(), 4, 512)
-			cam.Start3D2D(Vector(14,18+vel2/16,9.5+vel1/16), Angle(0, 278, 90), 0.026)
+			cam.Start3D2D(Vector(14,18+vel2/16,9.5-vel1/16), Angle(0, 278, 90), 0.026)
 		ScrW = function() return 1366 end
 		ScrH = function() return 768 end -- For 3D mode fix
 	end
@@ -200,7 +201,7 @@ hook.Add("DFHUDPaint", "DefaultHUDPaint", function(bool)
 		local vel1 =math.AngleDifference(DefaultHUD.Angles[1], LocalPlayer():EyeAngles()[1])
 		local vel2 = math.AngleDifference(DefaultHUD.Angles[2], LocalPlayer():EyeAngles()[2])
 		cam.Start3D(Vector(0,0,0), Angle(0,0,0), 106, 0, 0, ScrW(), ScrH(), 4, 512)
-			cam.Start3D2D(Vector(18,16+vel2/16,9+vel1/16), Angle(0, 265, 90), 0.026)
+			cam.Start3D2D(Vector(18,16+vel2/16,9-vel1/16), Angle(0, 265, 90), 0.026)
 	end
 	if hook.Run("HUDShouldDraw", "CHudAmmo", true) and LocalPlayer():Alive() and IsValid(LocalPlayer():GetActiveWeapon()) and (DefaultHUD.DrawAmmo == nil and true or DefaultHUD.DrawAmmo) then
 		local weapon = LocalPlayer():GetActiveWeapon()
@@ -294,6 +295,7 @@ hook.Add("DFHUDPaint", "DefaultHUDPaint", function(bool)
 		cam.End3D2D()
 		cam.End3D()
 	end
+	surface.DisableClipping(false)
 end)
 if !ispanel(DefaultHUD.HudPanel) then
 	timer.Simple(1, function()
