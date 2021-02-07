@@ -97,7 +97,7 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 	surface.DisableClipping(false)
 end)
 hook.Add("CreateMove", "DefaultHUDMove", function(cmd)
-	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) and (!IsValid(LocalPlayer():GetActiveWeapon()) or !GetConVar("dfhud_enable"):GetBool() or !LocalPlayer():GetActiveWeapon():GetClass() != "weapon_camera") then return end
+	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) and (!IsValid(LocalPlayer():GetActiveWeapon()) or !GetConVar("dfhud_enable"):GetBool()) then return end
 	if ( cmd:GetMouseWheel() != 0 ) and !cmd:KeyDown(IN_WEAPON1) and !cmd:KeyDown(IN_WEAPON2) and !cmd:KeyDown(IN_ATTACK) and !cmd:KeyDown(IN_ATTACK2) and LocalPlayer():Alive() then
 		if DefaultHUD.Time < SysTime() then
 			DefaultHUD.Slot = LocalPlayer():GetActiveWeapon():GetSlot()+1

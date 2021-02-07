@@ -108,8 +108,8 @@ end)
 hook.Add("DFHUDPaint", "DefaultHUDPaint", function(bool)
 	local ScrH = ScrH
 	local ScrW = ScrW -- Setting it to be a local var, so we'll won't change global one
-	surface.DisableClipping(true)
 	if !GetConVar("dfhud_enable"):GetBool() then return end
+	surface.DisableClipping(true)
 	if bool then
 		local vel1 =math.AngleDifference(DefaultHUD.Angles[1], LocalPlayer():EyeAngles()[1])
 		local vel2 = math.AngleDifference(DefaultHUD.Angles[2], LocalPlayer():EyeAngles()[2])
