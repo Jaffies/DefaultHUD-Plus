@@ -96,19 +96,16 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 	end
 	surface.DisableClipping(false)
 end)
-hook.Add("CreateMove", "DefaultHUDMove", function(cmd)
-	if !hook.Run("HUDShouldDraw", "CHudWeaponSelection", true) and (!IsValid(LocalPlayer():GetActiveWeapon()) or !GetConVar("dfhud_enable"):GetBool()) then return end
-	if ( cmd:GetMouseWheel() != 0 ) and !cmd:KeyDown(IN_WEAPON1) and !cmd:KeyDown(IN_WEAPON2) and !cmd:KeyDown(IN_ATTACK) and !cmd:KeyDown(IN_ATTACK2) and LocalPlayer():Alive() then
+hook.Add("PlayerBindPress", "DefaultHUDPress", function(ply, bind)
+	if ( bind == "invprev" or bind == "invnext") and !LocalPlayer():KeyDown(IN_WEAPON1) and !LocalPlayer():KeyDown(IN_WEAPON2) and !LocalPlayer():KeyDown(IN_ATTACK) and !LocalPlayer():KeyDown(IN_ATTACK2) and LocalPlayer():Alive() then
 		if DefaultHUD.Time < SysTime() then
 			DefaultHUD.Slot = LocalPlayer():GetActiveWeapon():GetSlot()+1
 			DefaultHUD.SlotPos = table.KeyFromValue(DefaultHUD.GetWeapons()[DefaultHUD.Slot], LocalPlayer():GetActiveWeapon())
 		end
-		DefaultHUD.MoveWeapons(cmd:GetMouseWheel() < 0 , LocalPlayer():GetActiveWeapon())
+		DefaultHUD.MoveWeapons(bind == "invnext", LocalPlayer():GetActiveWeapon())
 		DefaultHUD.Time = SysTime() + 1
 		surface.PlaySound "common/wpn_moveselect.wav"
 	end
-end)
-hook.Add("PlayerBindPress", "DefaultHUDPress", function(ply, bind)
 	if !GetConVar("dfhud_enable"):GetBool() then return end
 	if bind == "+attack" and DefaultHUD.Time > SysTime() and LocalPlayer():Alive() then
 		input.SelectWeapon(DefaultHUD.GetWeapons()[DefaultHUD.Slot][DefaultHUD.SlotPos])
