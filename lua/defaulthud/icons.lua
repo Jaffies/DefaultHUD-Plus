@@ -5,10 +5,9 @@ function DefaultHUD.GetIcon(weapon) -- Позволяет получить ик�
 	local mat = CreateMaterial( "DefaultHUDIcons", "UnLitGeneric", {
 	["$basetexture"] = "color/white",
 	["$model"] = 1,
-	["$translucent"] = 1,
+	["$alphatest"] = 1,
 	["$vertexalpha"] = 1,
 	["$vertexcolor"] = 1,
-	["$additive"] = 1,
 	})
 	local icon = DefaultHUD.CreateIcon(weapon, 255, 0)
 	mat:SetTexture("$basetexture", icon)

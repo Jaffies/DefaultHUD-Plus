@@ -54,7 +54,30 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 			for k, v in pairs(weapon[i]) do
 				local base = weapons.Get(v.Base) or {}
 				if k == DefaultHUD.SlotPos then
-					draw.RoundedBox(8/768*ScrH(), x + (63 / 1366 * ScrW() ) * (i-1), y+(45/768*ScrH()) *(k-1), 181/1366*ScrW(), 128/768*ScrH(), boxcolor)
+					render.SetStencilWriteMask( 0xFF )
+					render.SetStencilTestMask( 0xFF )
+					render.SetStencilReferenceValue( 0 )
+					render.SetStencilPassOperation( STENCIL_KEEP )
+					render.SetStencilZFailOperation( STENCIL_KEEP )
+					render.ClearStencil()
+					render.SetStencilEnable( true )
+					render.SetStencilReferenceValue( 1 )
+					render.SetStencilCompareFunction( STENCIL_NEVER )
+					render.SetStencilFailOperation( STENCIL_REPLACE )
+						draw.RoundedBox(8/768*ScrH(), x + (63 / 1366 * ScrW() ) * (i-1), y+(45/768*ScrH()) *(k-1), 181/1366*ScrW(), 128/768*ScrH(), boxcolor)
+					render.SetStencilCompareFunction( STENCIL_EQUAL )
+					render.SetStencilFailOperation( STENCIL_KEEP )
+						surface.SetDrawColor(255, 255, 255)
+						surface.SetMaterial(Material("pp/blurscreen"))
+						local blur = GetConVar("dfhud_blur"):GetBool() and !GetConVar("dfhud_3d"):GetBool() and alpha2 > 0 and GetConVar("dfhud_blur_power"):GetInt() or 0
+						for i=1, blur do
+							Material("pp/blurscreen"):SetFloat("$blur", i)
+							Material("pp/blurscreen"):Recompute()
+							render.UpdateScreenEffectTexture()
+							surface.DrawTexturedRectUV(0, 0, ScrW(), ScrH(), 0, 0, 1, 1)
+						end
+						draw.RoundedBox(8/768*ScrH(), x + (63 / 1366 * ScrW() ) * (i-1), y+(45/768*ScrH()) *(k-1), 181/1366*ScrW(), 128/768*ScrH(), boxcolor)
+					render.SetStencilEnable(false)
 					if dfweapons[v:GetClass()] then
 						draw.SimpleText(dfweapons[v:GetClass()], "LuaBoxRocketBlur", x + (90/1366*ScrW()) + (63 / 1366 * ScrW() ) * (i-1), y+56/768*ScrH()+(45/768*ScrH())*(k-1), Color( color.r, color.g, color.b, alpha2 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						draw.SimpleText(dfweapons[v:GetClass()], "LuaBoxRocket", x + (90/1366*ScrW()) + (63 / 1366 * ScrW() ) * (i-1), y+56/768*ScrH()+(45/768*ScrH())*(k-1), Color( color.r, color.g, color.b, alpha2 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -77,16 +100,62 @@ hook.Add("DFHUDPaint", "DefaultHUDSelectorPaint", function(bool)
 					draw.SimpleText(tostring(v.PrintName or language.GetPhrase(v:GetClass())), "HudSelectionText", x + 90/1366*ScrW() + 63/1366*ScrW() * (i-1), y+107/768*ScrH()+45/768*ScrH()*(k-1), Color( color.r, color.g, color.b, alpha2 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 					y = 120/768*ScrH()
 				else
-					draw.SimpleText(tostring(i), "HudSelectionText", x + ( 8 / 1366 * ScrW() ) + (63 / 1366 * ScrW() ) * (i-1), 34/768*ScrH(), Color( color.r, color.g, color.b, alpha2 ))
-					draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y+45/768*ScrH()*(k-1), 181/1366*ScrW(), 33/768*ScrH(), boxcolor)
-					draw.SimpleText(tostring(v.PrintName or language.GetPhrase(v:GetClass())), "HudSelectionText", x + 90/1366*ScrW() + 63/1366*ScrW() * (i-1), y+12/768*ScrH()+45/768*ScrH()*(k-1), Color( color.r, color.g, color.b, alpha2 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+					render.SetStencilWriteMask( 0xFF )
+					render.SetStencilTestMask( 0xFF )
+					render.SetStencilReferenceValue( 0 )
+					render.SetStencilPassOperation( STENCIL_KEEP )
+					render.SetStencilZFailOperation( STENCIL_KEEP )
+					render.ClearStencil()
+					render.SetStencilEnable( true )
+					render.SetStencilReferenceValue( 1 )
+					render.SetStencilCompareFunction( STENCIL_NEVER )
+					render.SetStencilFailOperation( STENCIL_REPLACE )
+						draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y+45/768*ScrH()*(k-1), 181/1366*ScrW(), 33/768*ScrH(), boxcolor)
+					render.SetStencilCompareFunction( STENCIL_EQUAL )
+					render.SetStencilFailOperation( STENCIL_KEEP )
+						surface.SetDrawColor(255, 255, 255)
+						surface.SetMaterial(Material("pp/blurscreen"))
+						local blur = GetConVar("dfhud_blur"):GetBool() and alpha2 > 0 and !GetConVar("dfhud_3d"):GetBool() and GetConVar("dfhud_blur_power"):GetInt() or 0
+						for i=1, blur do
+							Material("pp/blurscreen"):SetFloat("$blur", i)
+							Material("pp/blurscreen"):Recompute()
+							render.UpdateScreenEffectTexture()
+							surface.DrawTexturedRectUV(0, 0, ScrW(), ScrH(), 0, 0, 1, 1)
+						end
+						draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y+45/768*ScrH()*(k-1), 181/1366*ScrW(), 33/768*ScrH(), boxcolor)
+						draw.SimpleText(tostring(i), "HudSelectionText", x + ( 8 / 1366 * ScrW() ) + (63 / 1366 * ScrW() ) * (i-1), 34/768*ScrH(), Color( color.r, color.g, color.b, alpha2 ))
+						draw.SimpleText(tostring(v.PrintName or language.GetPhrase(v:GetClass())), "HudSelectionText", x + 90/1366*ScrW() + 63/1366*ScrW() * (i-1), y+12/768*ScrH()+45/768*ScrH()*(k-1), Color( color.r, color.g, color.b, alpha2 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+					render.SetStencilEnable(false)
 				end
 			end
 			y = 25 / 768 * ScrH()
 			x = 564 / 1366 * ScrW()
 		else
-			draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y, 52/1366*ScrW(), 50/768*ScrH(), boxcolor)
-			draw.SimpleText(tostring(i), "HudSelectionText", x + 8/1366*ScrW() + 63/1366*ScrW() * (i-1), 34/768*ScrH(), Color( color.r, color.g, color.b , alpha2 ))
+			render.SetStencilWriteMask( 0xFF )
+			render.SetStencilTestMask( 0xFF )
+			render.SetStencilReferenceValue( 0 )
+			render.SetStencilPassOperation( STENCIL_KEEP )
+			render.SetStencilZFailOperation( STENCIL_KEEP )
+			render.ClearStencil()
+			render.SetStencilEnable( true )
+			render.SetStencilReferenceValue( 1 )
+			render.SetStencilCompareFunction( STENCIL_NEVER )
+			render.SetStencilFailOperation( STENCIL_REPLACE )
+				draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y, 52/1366*ScrW(), 50/768*ScrH(), boxcolor)
+			render.SetStencilCompareFunction( STENCIL_EQUAL )
+			render.SetStencilFailOperation( STENCIL_KEEP )
+				surface.SetDrawColor(255, 255, 255)
+				surface.SetMaterial(Material("pp/blurscreen"))
+				local blur = GetConVar("dfhud_blur"):GetBool() and !GetConVar("dfhud_3d"):GetBool() and GetConVar("dfhud_blur_power"):GetInt() or 0
+				for i=1, blur do
+					Material("pp/blurscreen"):SetFloat("$blur", i)
+					Material("pp/blurscreen"):Recompute()
+					render.UpdateScreenEffectTexture()
+					surface.DrawTexturedRectUV(0, 0, ScrW(), ScrH(), 0, 0, 1, 1)
+				end
+				draw.RoundedBox(8/768*ScrH(), x + 63/1366*ScrW() * (i-1), y, 52/1366*ScrW(), 50/768*ScrH(), boxcolor)
+				draw.SimpleText(tostring(i), "HudSelectionText", x + 8/1366*ScrW() + 63/1366*ScrW() * (i-1), 34/768*ScrH(), Color( color.r, color.g, color.b , alpha2 ))
+			render.SetStencilEnable(false)
 		end
 	end
 	if bool then

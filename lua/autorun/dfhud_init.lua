@@ -20,3 +20,5 @@ CreateConVar("dfhud_box_color_r", 0, FCVAR_ARCHIVE, "Conrols HUD's color", 0,255
 CreateConVar("dfhud_box_color_g", 0, FCVAR_ARCHIVE, "Conrols HUD's color", 0,255)
 CreateConVar("dfhud_box_color_b", 0, FCVAR_ARCHIVE, "Conrols HUD's color", 0,255)
 CreateConVar("dfhud_box_color_a", 100, FCVAR_ARCHIVE, "Conrols HUD's color", 0,255)
+CreateConVar("dfhud_blur", 0, FCVAR_ARCHIVE, "Enables HUD's blur", 0, 1)
+CreateConVar("dfhud_blur_power", 3, FCVAR_ARCHIVE, "Conrols HUD's blur power", 0, 15)
